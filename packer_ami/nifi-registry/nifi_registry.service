@@ -1,0 +1,15 @@
+[Unit]
+Description=Apache NiFi Registry Daemon
+Documentation=https://nifi.apache.org/docs/nifi-registry-docs/index.html
+Requires=network.target
+After=network.target
+
+[Service]    
+Type=forking
+WorkingDirectory=/opt/nifi-registry
+ExecStart=/opt/nifi-registry/nifi-registry-1.16.1/bin/nifi-registry.sh start
+ExecStop=/opt/nifi-registry/nifi-registry-1.16.1/bin/nifi-registry.sh stop
+ExecReload=/opt/nifi-registry/nifi-registry-1.16.1/bin/nifi-registry.sh restart
+
+[Install]
+WantedBy=default.target
