@@ -1,0 +1,8 @@
+aws_region                  = "ap-northeast-1"
+security_group_id           = "your_aws_security_group_id"
+subnet_id                   = "your_aws_subnet_id"
+vpc_id                      = "your_aws_vpc_id"
+based_ami_id                = "ami-088da9557aae42f39"
+instance_type               = "t3.small"
+admin_gmail                 = "service_admin_gmail_account"
+env                         = "staging"
