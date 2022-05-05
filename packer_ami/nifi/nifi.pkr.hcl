@@ -88,13 +88,17 @@ variable "env" {
     description = "Setting current AMI Environment"
 }
 
+locals {
+  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "amazon-ebs" "nifi" {
     access_key = var.aws_access_key
     secret_key = var.aws_secret_key
     region     = var.aws_region
     
     source_ami      = var.based_ami_id
-    ami_name        = "packer-nifi-${var.env}"
+    ami_name        = "packer-nifi-${var.env}-${local.timestamp}"
     ami_description = "The Apache NiFi service AMI for ${var.env}"
     instance_type   = var.instance_type
     
