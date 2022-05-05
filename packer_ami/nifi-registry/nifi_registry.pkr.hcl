@@ -93,40 +93,27 @@ variable "env" {
     description = "Setting current AMI Environment"
 }
 
-## Secret Manager DataSource
-data "amazon-secretsmanager" "nifi-registry-db-secret-usr" {
-    name = var.secret_manager_name
-    key  = "username"
-}
-
-data "amazon-secretsmanager" "nifi-registry-db-secret-pwd" {
-    name = var.secret_manager_name
-    key  = "password"
-}
-
-## local values
 locals {
-    "db_username"  = data.amazon-secretsmanager.nifi-registry-db-secret-usr.value
-    "db_pwassword" = data.amazon-secretsmanager.nifi-registry-db-secret-pwd.value
+  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
 source "amazon-ebs" "nifi-registry" {
-    access_key = var.aws_access_key
-    secret_key = var.aws_secret_key
-    region     = var.aws_region
+    access_key  = var.aws_access_key
+    secret_key  = var.aws_secret_key
+    region      = var.aws_region
     
     source_ami      = var.based_ami_id
-    ami_name        = "packer-nifi-registry-${var.env}"
+    ami_name        = "packer-nifi-registry-${var.env}-${local.timestamp}"
     ami_description = "The Apache NiFi Registry service AMI for ${var.env}"
     instance_type   = var.instance_type
     
-    ssh_keypair_name     = var.ssh_keypair_name
-    ssh_private_key_file = var.ssh_private_key_file_path
-    ssh_username         = "ubuntu"
-
-    security_group_id = var.security_group_id
-    subnet_id         = var.subnet_id
-    vpc_id            = var.vpc_id
+    ssh_keypair_name        = var.ssh_keypair_name
+    ssh_private_key_file    = var.ssh_private_key_file_path
+    ssh_username            = "ubuntu"
+    
+    security_group_id   = var.security_group_id
+    subnet_id           = var.subnet_id
+    vpc_id              = var.vpc_id
 
     ## additional volume
     launch_block_device_mappings {
@@ -159,9 +146,7 @@ build {
         environment_vars = [
             "GOOGLE_CLIENT_ID=${var.gmail_oauth_client_id}",
             "GOOGLE_CLIENT_SECRET=${var.gmail_oauth_client_secret}",
-            "ADMIN_GMAIL=${var.admin_gmail}",
-            "DB_USERNAME=${local.db_username}",
-            "DB_PASSWORD=${local.db_pwassword}"
+            "ADMIN_GMAIL=${var.admin_gmail}"
         ]
     }
 }
