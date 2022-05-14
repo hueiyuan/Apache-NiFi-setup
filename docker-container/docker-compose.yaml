@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    nifi:
+        image: apache/nifi:1.16.1
+        container_name: nifi-service
+        restart: always
+        ports:
+            - 8443:8443/tcp
+            - 9090:8080/tcp
+        environment:
+            - SINGLE_USER_CREDENTIALS_USERNAME=${NIFI_USERNAME}
+            - SINGLE_USER_CREDENTIALS_PASSWORD=${nifipassword}
+        networks:
+            - nifi-network
+
+    nifi-registry:
+        image: apache/nifi-registry:1.16.1
+        container_name: nifi-registry-service
+        restart: always
+        ports:
+            - 18080:18080/tcp
+        networks:
+            - nifi-network
+networks:
+    nifi-network:
