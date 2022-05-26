@@ -130,6 +130,11 @@ build {
     sources = [
         "source.amazon-ebs.nifi"
     ]
+    
+    provisioner "file" {
+        source      = "./upgrade_nifi.sh"
+        destination = "/tmp/upgrade_nifi.sh"
+    }
 
     provisioner "file" {
         source      = "./nifi.service"
