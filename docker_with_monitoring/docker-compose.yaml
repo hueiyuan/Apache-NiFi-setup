@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+    nifi:
+        image: apache/nifi:1.16.1
+        container_name: nifi-service
+        restart: always
+        ports:
+            - 8443:8443/tcp
+            - 8080:8080/tcp
+            - 9092:9092/tcp
+        volumes:
+            - ./data:/tmp/data
+        environment:
+            - SINGLE_USER_CREDENTIALS_USERNAME=admin
+            - SINGLE_USER_CREDENTIALS_PASSWORD=ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+        networks:
+            - nifi-network
+
+    promethus:
+        image: prom/prometheus:latest
+        container_name: nifi-prometheus
+        volumes:
+            - "./conf/prometheus.yml:/etc/prometheus/prometheus.yml"
+        ports:
+            - 9090:9090/tcp
+        networks:
+            - nifi-network
+            
+    grafana:
+        image: grafana/grafana
+        container_name: nifi-grafana
+        ports:
+            - 3000:3000/tcp
+        networks:
+            - nifi-network
+
+networks:
+    nifi-network:
+    
