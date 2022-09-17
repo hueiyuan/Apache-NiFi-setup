@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  external_labels:
+    monitor: 'local-monitor'
+
+scrape_configs:
+  - job_name: 'nifi_reporting_job'
+    scrape_interval: 5s
+    honor_labels: true
+    scheme: https
+    static_configs:
+      - targets: ['172.17.0.1:8443']
+    
