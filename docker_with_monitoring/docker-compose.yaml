@@ -21,7 +21,7 @@ services:
         image: prom/prometheus:latest
         container_name: nifi-prometheus
         volumes:
-            - "./conf/prometheus.yml:/etc/prometheus/prometheus.yml"
+            - "./conf/prometheus.yaml:/etc/prometheus/prometheus.yaml"
         ports:
             - 9090:9090/tcp
         networks:
